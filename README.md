@@ -87,11 +87,17 @@ Asegúrate de tener Python 3.7+ instalado en tu sistema.
 
 .
 ├── datos/
+
 │   └── open-cookie-database.csv  # Base de datos de cookies (se descarga automáticamente)
+
 ├── static/
+
 │   └── index.html                # Interfaz web del usuario
+
 ├── main.py                       # Archivo principal de la aplicación FastAPI
+
 ├── requirements.txt              # Lista de dependencias del proyecto
+
 └── README.md                     # Este archivo
 
 
