@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Analizador de Cookies</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link rel="stylesheet" href="/static/estilos.css">
+</head>
+<body>
+<div class="container mt-4">
+    <h1>Analizador de Cookies</h1>
+
+    <form id="cookieForm" class="mb-3">
+        <div class="mb-3">
+            <label for="url" class="form-label">Introduce una URL:</label><br>
+            <input type="text" class="form-control" id="url" name="url" placeholder="https://www.ejemplo.com" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Analizar</button>
+    </form>
+
+    <div id="error" class="alert alert-danger" style="display:none;"></div>
+
+    <div id="resultado" style="display:none;">
+        <h2>Resultados</h2>
+        <table id="tablaCookies" class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Dominio</th>
+                    <th>Ruta</th>
+                    <th>Descripción</th>
+                    <th>Periodo de permanencia</th>
+                    <th>Categoría</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+<script>
+    $("#cookieForm").on("submit", function(e) {
+        e.preventDefault();
+        const url = $("#url").val();
+        $("#error").hide().text("");
+        $("#resultado").hide();
+        $("#tablaCookies tbody").empty();
+
+        $.ajax({
+            url: "/get_cookies",
+            method: "POST",
+            contentType: "application/json",
+            data: JSON.stringify({ url: url }),
+            success: function(response) {
+                const cookies = response.cookies;
+                if (cookies.length === 0) {
+                    $("#error").text("No se encontraron cookies.").show();
+                    return;
+                }
+
+                cookies.forEach(cookie => {
+                    const row = `
+                        <tr>
+                            <td>${cookie.name || "-"}</td>
+                            <td>${cookie.domain || "-"}</td>
+                            <td>${cookie.path || "-"}</td>
+                            <td>${cookie.descripcion || "-"}</td>
+                            <td>${cookie.retencion || "-"}</td>
+                            <td>${cookie.categoria || "-"}</td>
+                        </tr>
+                    `;
+                    $("#tablaCookies tbody").append(row);
+                });
+
+                $("#resultado").show();
+            },
+            error: function(xhr) {
+                const errMsg = xhr.responseJSON?.detail || "Error al procesar la solicitud.";
+                $("#error").text(errMsg).show();
+            }
+        });
+    });
+</script>
+</body>
+</html>
