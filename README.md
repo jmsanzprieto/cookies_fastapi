@@ -83,23 +83,6 @@ Asegúrate de tener Python 3.7+ instalado en tu sistema.
 2.  Introduce la URL en el campo proporcionado y haz clic en el botón "Obtener Cookies".
 3.  La aplicación procesará la URL, obtendrá las cookies y mostrará una tabla con la información de cada cookie, incluyendo los detalles enriquecidos de la Open Cookie Database (si se encuentran).
 
-## Estructura del Proyecto
-
-.
-├── datos/
-
-│   └── open-cookie-database.csv  # Base de datos de cookies (se descarga automáticamente)
-
-├── static/
-
-│   └── index.html                # Interfaz web del usuario
-
-├── main.py                       # Archivo principal de la aplicación FastAPI
-
-├── requirements.txt              # Lista de dependencias del proyecto
-
-└── README.md                     # Este archivo
-
 
 ## Logging
 
